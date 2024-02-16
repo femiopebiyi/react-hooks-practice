@@ -1,25 +1,35 @@
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 
 function App() {
 
-   const inputRef = useRef<HTMLInputElement>(null);
+ const [count, setCount] = useState(0);
 
-     useEffect(() => {
-    // Focus on the input element when the component mounts
-    inputRef.current?.focus();
+  // Define a callback function that increments the count
+  const increment = useCallback(() => {
+    setCount(prevCount => prevCount + 1);
   }, []);
-
-
 
   return (
     <div>
-      <input ref={inputRef} type="text" value="femi is the goat"/>
-      <button onClick={() => {
-        inputRef.current?.focus(); console.log(inputRef.current?.value)}}>Focus Input</button>
+      <p>Count: {count}</p>
+      {/* Pass the callback function to a child component */}
+      <ChildComponent onIncrement={increment} />
     </div>
-  )
+  );
 }
+
+interface ChildProps {
+  onIncrement: () => void;
+}
+
+const ChildComponent = ({ onIncrement }: ChildProps) => {
+  return (
+    <button onClick={onIncrement}>
+      Increment
+    </button>
+  );
+};
 
 export default App
